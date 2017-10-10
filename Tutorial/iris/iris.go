@@ -22,6 +22,7 @@ func main() {
 
 	for {
 		record, err := reader.Read()
+		// io.EOF is an example of error
 		if err == io.EOF {
 			break
 		}
