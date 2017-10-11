@@ -3,25 +3,29 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/Axect/csv"
 	df "github.com/kniren/gota/dataframe"
-	sr "github.com/kniren/gota/series"
 )
 
 func main() {
-	irisFile, err := os.Open("../iris/iris.csv")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer irisFile.Close()
+	irisCSV := csv.Read("../iris/iris.csv")
+	irisData := make([][]string, len(irisCSV)+1, len(irisCSV)+1)
 
-	irisDF := df.ReadCSV(irisFile)
+	irisData[0] = []string{"sepal_length", "sepal_width", "petal_length", "petal_width", "species"}
+	for i := range irisCSV {
+		irisData[i+1] = irisCSV[i]
+	}
+
+	irisDF := df.LoadRecords(
+		irisData,
+	)
+
 	fmt.Println(irisDF)
 
 	filter := df.F{
 		Colname:    "species",
-		Comparator: sr.Eq,
+		Comparator: "==",
 		Comparando: "Iris-versicolor",
 	}
 
