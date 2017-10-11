@@ -10,12 +10,9 @@ import (
 
 func main() {
 	irisCSV := csv.Read("../iris/iris.csv")
-	irisData := make([][]string, len(irisCSV)+1, len(irisCSV)+1)
+	header := []string{"sepal_length", "sepal_width", "petal_length", "petal_width", "species"}
 
-	irisData[0] = []string{"sepal_length", "sepal_width", "petal_length", "petal_width", "species"}
-	for i := range irisCSV {
-		irisData[i+1] = irisCSV[i]
-	}
+	irisData := csv.AddHeader(irisCSV, header)
 
 	irisDF := df.LoadRecords(
 		irisData,
